@@ -1,0 +1,26 @@
+---
+- name: "Verbindung zu Switches und Portkonfiguration"
+  hosts: switches
+  gather_facts: no
+  tasks:
+    - name: Oeffentliche IP abrufen
+      ipify_facts:
+    - name: "CSV auslesen"
+      read_csv:
+        path: /home/labor/test.csv
+      register: test
+      delegate_to: localhost
+    - name: "Ports konfiguieren (Name,Mode,VLAN)"
+      ios_interface:
+        name: GigabitEthernet1/0/2
+        mode: access
+        access_vlan: 101
+    - name: "Nicht unterstuetze Einstellungen werden abgeandert"
+      ios_command:
+        commands:
+            - command: 'enable'
+            - command: 'configure terminal'
+            - command: 'no logging event link-status'
+            - command: 'no snmp trap link-status'
+            - command: 'spanning-tree porfast edge'
+            - command: 'spanning-tree guard root'
