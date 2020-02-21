@@ -1,0 +1,26 @@
+---
+- name: "Verbindung zu Switches und Portkonfiguration"
+  hosts: switches
+  gather_facts: no
+  tasks:
+    - name: Oeffentliche IP abrufen
+      ipify_facts:
+    - name: "CSV auslesen"
+      read_csv:
+        path: /home/labor/test.csv
+      register: test
+      delegate_to: localhost
+    - name: "Konfiguiere GigabitEthernet1/0/3"
+      ios_command:
+        commands:
+            - command: 'enable'
+            - command: '#'
+            - command: 'conf t'
+            - command: 'interface GigabitEthernet1/0/3'
+            - command: 'switchport access vlan 102'
+            - command: 'switchport mode access'
+            - command: 'no logging event link-status'
+            - command: 'no snmp trap link-status'
+            - command: 'no cdp enable'
+            - command: 'spanning-tree guard root'
+
