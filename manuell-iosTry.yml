@@ -23,4 +23,5 @@
             - command: 'no snmp trap link-status'
             - command: 'no cdp enable'
             - command: 'spanning-tree guard root'
+            - command: 'end'
 
